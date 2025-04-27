@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Isaque & Jade 💖</title>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap">
+  <style>
+    /* Estilos gerais */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #ffd6e0, #ffe4ec);
+      color: #6e0034;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    /* Fundo decorativo para a parte do contador */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50"><path fill="%23ffcccc" opacity="0.2" d="M25 42c-2 0-4-1-5-3-2 2-4 3-7 3-4 0-8-3-8-8 0-6 5-10 10-14l3 2 3-2c5 4 10 8 10 14 0 5-4 8-8 8z"/></svg>') repeat;
+      z-index: 0;
+      opacity: 0.2;
+    }
+
+    /* Seção 1 - Amor */
+    .container-love {
+      padding: 2rem;
+      max-width: 800px;
+      animation: fadeIn 2s ease-in;
+      background: rgba(255, 255, 255, 0.9);
+      margin-top: 2rem;
+      border-radius: 20px;
+      z-index: 1;
+      position: relative;
+    }
+
+    /* Seção 2 - Contagem */
+    .container-countdown {
+      margin-top: 3rem;
+      padding: 2rem;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 182, 193, 0.5);
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.3rem;
+      animation: pulse 2s infinite;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #a10057;
+      animation: fadeIn 2s ease-in 1s forwards;
+    }
+
+    .counter {
+      background: #ffffffcc;
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: slideUp 1s ease forwards;
+    }
+
+    .counter:nth-child(3) { animation-delay: 0.5s; }
+    .counter:nth-child(4) { animation-delay: 1s; }
+    .counter:nth-child(5) { animation-delay: 1.5s; }
+    .counter:nth-child(6) { animation-delay: 2s; }
+
+    .counter h2 {
+      margin-bottom: 0.5rem;
+      font-size: 1.4rem;
+    }
+
+    .counter p {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #d0006f;
+    }
+
+    /* Countdown Timer */
+    .countdown {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .time {
+      background-color: #ffb6c1;
+      color: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      min-width: 70px;
+      width: 70px;
+      box-shadow: 0 2px 5px rgba(255, 105, 135, 0.3);
+    }
+
+    .time span {
+      font-size: 2rem;
+      font-weight: bold;
+      display: block;
+    }
+
+    .time p {
+      margin: 0.5rem 0 0 0;
+      font-size: 1rem;
+    }
+
+    #toggle-hearts, #printBtn {
+      background-color: #ff80ab;
+      border: none;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 1.5rem;
+    }
+
+    #toggle-hearts:hover, #printBtn:hover {
+      background-color: #ff4f81;
+    }
+
+    #message {
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      color: #ff6b81;
+      font-family: 'Parisienne', cursive;
+    }
+
+    /* Animações */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+    }
+
+    /* Corações flutuantes */
+    .heart {
+      position: fixed;
+      top: 100vh;
+      color: #ff4f81;
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+      pointer-events: none;
+      opacity: 0.7;
+      z-index: 0;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .counter h2 { font-size: 1.2rem; }
+      .counter p { font-size: 1rem; }
+      .time { min-width: 60px; width: 60px; }
+      .time span { font-size: 1.6rem; }
+      .time p { font-size: 0.9rem; }
+    }
+  </style>
+
+  <!-- Biblioteca para capturar tela -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+<body>
+  <!-- Seção do amor -->
+  <div class="container-love">
+    <h1>Isaque & Jade 💘</h1>
+    <p class="subtitle">Nosso amor contado em dias, meses e anos</p>
+
+    <div class="counter">
+      <h2>Desde que nos conhecemos 💫</h2>
+      <p id="counter-known"></p>
+    </div>
+
+    <div class="counter">
+      <h2>Desde que viramos amigos 🤝</h2>
+      <p id="counter-friends"></p>
+    </div>
+
+    <div class="counter">
+      <h2>Desde que começamos a nos ver pessoalmente 👀</h2>
+      <p id="counter-prayer"></p>
+    </div>
+
+    <div class="counter">
+      <h2>Desde que começamos a namorar 💍</h2>
+      <p id="counter-dating"></p>
+    </div>
+
+    <button id="toggle-hearts">💔 Pausar corações</button>
+  </div>
+
+  <!-- Seção da contagem regressiva -->
+  <div class="container-countdown">
+    <h1 style="font-family: 'Parisienne', cursive; color: #ff6b81;">Contando os segundos para te ver, Jade</h1>
+
+    <div class="countdown">
+      <div class="time"><span id="days">00</span><p>Dias</p></div>
+      <div class="time"><span id="hours">00</span><p>Horas</p></div>
+      <div class="time"><span id="minutes">00</span><p>Minutos</p></div>
+      <div class="time"><span id="seconds">00</span><p>Segundos</p></div>
+    </div>
+
+    <p id="message"></p>
+
+    <form id="newDateForm" style="display: none; margin-top: 20px;">
+      <label for="newDate">Nova Data: </label>
+      <input type="date" id="newDate" required>
+      <label for="newTime">Hora: </label>
+      <input type="time" id="newTime" required>
+      <button type="submit">Atualizar Contagem</button>
+    </form>
+
+    <button id="printBtn">📸 Capturar Timer</button>
+  </div>
+
+  <script>
+    // Funções para Contador de Aniversários
+    document.addEventListener("DOMContentLoaded", () => {
+      function calcTimeSince(dateString) {
+        const startDate = new Date(dateString);
+        const now = new Date();
+        let years = now.getFullYear() - startDate.getFullYear();
+        let months = now.getMonth() - startDate.getMonth();
+        let days = now.getDate() - startDate.getDate();
+
+        if (days < 0) {
+          months--;
+          const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+          days += prevMonth.getDate();
+        }
+        if (months < 0) {
+          years--;
+          months += 12;
+        }
+        return `${years} ano(s), ${months} mês(es) e ${days} dia(s)`;
+      }
+
+      document.getElementById("counter-known").textContent = calcTimeSince("2024-02-10");
+      document.getElementById("counter-friends").textContent = calcTimeSince("2024-07-06");
+      document.getElementById("counter-prayer").textContent = calcTimeSince("2024-10-12");
+      document.getElementById("counter-dating").textContent = calcTimeSince("2024-12-28");
+
+      // Funções Corações
+      let heartInterval;
+      let heartsActive = true;
+
+      function createHearts() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 2 + 4) + "s";
+        heart.textContent = "❤️";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+
+      function startHearts() {
+        if (!heartInterval) {
+          heartInterval = setInterval(createHearts, 500);
+        }
+      }
+
+      function stopHearts() {
+        clearInterval(heartInterval);
+        heartInterval = null;
+      }
+
+      document.getElementById("toggle-hearts").addEventListener("click", () => {
+        if (heartsActive) {
+          stopHearts();
+          document.getElementById("toggle-hearts").textContent = "❤️ Retomar corações";
+        } else {
+          startHearts();
+          document.getElementById("toggle-hearts").textContent = "💔 Pausar corações";
+        }
+        heartsActive = !heartsActive;
+      });
+
+      startHearts();
+    });
+
+    // Funções para Contador de Tempo até Ver Jade
+    function setTargetDate(dateString, timeString) {
+      const [year, month, day] = dateString.split("-").map(Number);
+      const [hours, minutes] = timeString.split(":").map(Number);
+      return new Date(year, month - 1, day, hours, minutes, 0, 0);
+    }
+
+    let targetDate;
+
+    if (localStorage.getItem("savedDate") && localStorage.getItem("savedTime")) {
+      targetDate = setTargetDate(localStorage.getItem("savedDate"), localStorage.getItem("savedTime"));
+    } else {
+      targetDate = setTargetDate("2025-05-02", "07:00");
+    }
+
+    const waitingMessages = [
+      "Cada segundo me aproxima do teu sorriso, meu amor! 😊",
+      "Mal posso esperar para estar ao seu lado, minha vida! ❤️",
+      "Contando os minutos para te ver de novo, meu bem! 😻",
+      "Meu coração acelera a cada segundo que passa, amor! 💫"
+    ];
+
+    let messageIndex = 0;
+    let countdownInterval;
+
+    function updateCountdown() {
+      const now = new Date();
+      const timeDifference = targetDate - now;
+      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+      document.getElementById("days").textContent = String(days).padStart(2, "0");
+      document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+      document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+      document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
+
+      if (timeDifference <= 0) {
+        clearInterval(countdownInterval);
+        document.getElementById("message").textContent = "Meu amor, chegou o momento de te abraçar, Jade! 💕";
+        document.querySelector(".countdown").style.display = "none";
+        document.getElementById("newDateForm").style.display = "block";
+      }
+    }
+
+    function updateMessage() {
+      const messageElement = document.getElementById("message");
+      messageElement.textContent = waitingMessages[messageIndex];
+      messageIndex = (messageIndex + 1) % waitingMessages.length;
+    }
+
+    countdownInterval = setInterval(updateCountdown, 1000);
+    setInterval(updateMessage, 30000);
+    updateCountdown();
+    updateMessage();
+
+    document.getElementById("printBtn").addEventListener("click", () => {
+      const container = document.querySelector(".container-countdown");
+      html2canvas(container).then(canvas => {
+        canvas.toBlob(blob => {
+          const item = new ClipboardItem({ "image/png": blob });
+          navigator.clipboard.write([item]).then(() => {
+            alert("Imagem copiada para a área de transferência! 🥰");
+          }).catch(err => {
+            console.error("Erro ao copiar imagem:", err);
+          });
+        });
+      });
+    });
+
+    document.getElementById("newDateForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const newDate = document.getElementById("newDate").value;
+      const newTime = document.getElementById("newTime").value;
+      if (newDate && newTime) {
+        localStorage.setItem("savedDate", newDate);
+        localStorage.setItem("savedTime", newTime);
+        targetDate = setTargetDate(newDate, newTime);
+        document.querySelector(".countdown").style.display = "flex";
+        this.style.display = "none";
+        countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+      }
+    });
+  </script>
+</body>
+</html>
